@@ -1,0 +1,32 @@
+{
+  "name": "babel-plugin-graphql",
+  "version": "1.0.0",
+  "author": "Florent Cailhol <florent.cailhol@gmail.com>",
+  "license": "MIT",
+  "repository": "ooflorent/babel-plugin-graphql",
+  "keywords": [
+    "babel-plugin",
+    "graphql"
+  ],
+  "main": "lib/index.js",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "babel-core": "^5.1.11",
+    "graphql-parser": "^1.3.0",
+    "lodash": "^3.7.0"
+  },
+  "devDependencies": {
+    "babel": "^5.1.11",
+    "babel-eslint": "^3.0.1",
+    "eslint": "^0.19.0"
+  },
+  "scripts": {
+    "clean": "rm -rf lib",
+    "build": "babel src --out-dir lib --copy-files",
+    "watch": "npm run build -- --watch",
+    "lint": "eslint src/",
+    "prepublish": "npm run clean && npm run build"
+  }
+}
