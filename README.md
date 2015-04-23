@@ -2,7 +2,7 @@
 
 > Babel plugin that compile GraphQL tagged template strings.
 
-_Issues related to GraphQL parsing should be reporter on `graphql-parser` [issue-tracker][graphql-parser-gh]_
+_Issues related to GraphQL parsing should be reporter on `graphql-parser` [issue-tracker][graphql-parser-gh]._
 
 ## Install
 
@@ -72,4 +72,4 @@ var UserQuery = function UserQuery(params) {
 };
 ```
 
-[graphql-parser-gh]: https://github.com/ooflorent/graphql-parser
+[graphql-parser-gh]: https://github.com/ooflorent/graphql-parser/issues
