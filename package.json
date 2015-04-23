@@ -1,6 +1,6 @@
 {
   "name": "babel-plugin-graphql",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Babel plugin that compile GraphQL tagged template strings",
   "author": "Florent Cailhol <florent.cailhol@gmail.com>",
   "license": "MIT",
