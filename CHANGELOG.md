@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+* Move `babel-core` to `peerDependencies`
+
 ## 1.0.0
 
 * Initial release
