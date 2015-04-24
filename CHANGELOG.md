@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+* NPM 3 compatibility
+
 ## 1.0.1
 
 * Move `babel-core` to `peerDependencies`
