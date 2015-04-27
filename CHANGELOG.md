@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.0
+
+* Make `GraphQL` import unnecessary
+
 ## 1.0.2
 
 * NPM 3 compatibility

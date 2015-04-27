@@ -4,7 +4,7 @@ import * as GraphQLToBabel from './graphql_to_babel'
 
 const transformer = new Transformer(GraphQLToBabel)
 
-export default function compile(node) {
+export default function compile(quasi, node) {
   t.assertTemplateLiteral(node)
 
   const strings = node.quasis.map((child) => child.value.raw)
@@ -16,6 +16,9 @@ export default function compile(node) {
   })
 
   return t.functionExpression(null, [t.identifier('params')], t.blockStatement([
+    t.variableDeclaration('const', [
+      t.variableDeclarator(t.identifier('GraphQL'), t.memberExpression(quasi, t.identifier('GraphQL'))),
+    ]),
     t.returnStatement(replacement),
   ]))
 }

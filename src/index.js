@@ -5,7 +5,7 @@ export default new Transformer('graphql', {
   TaggedTemplateExpression(node) {
     const {tag, quasi} = node
     if (t.isIdentifier(tag, {name: 'graphql'})) {
-      return compile(quasi)
+      return compile(tag, quasi)
     }
 
     return node
