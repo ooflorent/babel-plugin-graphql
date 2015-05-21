@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.0.0
+
+* Upgrade to latest babel plugin API
+* Upgrade `graphql-parser` to `2.0.0`
+
 ## 1.1.0
 
 * Make `GraphQL` import unnecessary
