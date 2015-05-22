@@ -15,14 +15,7 @@ export default function build(babel) {
       const query = t.objectExpression(props)
 
       if (node.fields.length > 0) {
-        for (let i = 0; i < node.fields.length; i++) {
-          const field = node.fields[i]
-          if (t.isCallExpression(field)) {
-            node.fields[i] = t.spreadProperty(t.memberExpression(field, t.identifier('fields')))
-          }
-        }
-
-        props.push(t.property('init', t.identifier('fields'), t.objectExpression(node.fields)))
+        props.push(compileFields(node.fields))
       }
 
       return query
@@ -40,8 +33,7 @@ export default function build(babel) {
       }
 
       if (node.fields.length > 0) {
-
-        props.push(t.property('init', t.identifier('fields'), t.objectExpression(node.fields)))
+        props.push(compileFields(node.fields))
       }
 
       return t.property('init', t.identifier(node.name), t.objectExpression(props))
@@ -62,6 +54,17 @@ export default function build(babel) {
     Reference(node) {
       return this.refs[node.name]
     }
+  }
+
+  function compileFields(fields) {
+    for (let i = 0; i < fields.length; i++) {
+      const field = fields[i]
+      if (t.isCallExpression(field)) {
+        fields[i] = t.spreadProperty(t.memberExpression(field, t.identifier('fields')))
+      }
+    }
+
+    return t.property('init', t.identifier('fields'), t.objectExpression(fields))
   }
 
   function compile(node) {

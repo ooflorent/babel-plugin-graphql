@@ -26,11 +26,16 @@ Or add the plugin to your `.babelrc` configuration:
 }
 ```
 
+__Note:__ Due to current API limitations you need to enable `es7.objectRestSpread` transformer or _stage 1_ transformers.
+
 ## Example
 
 The plugin will compile the following code:
 
 ```js
+const IMAGE_WIDTH = 80
+const IMAGE_HEIGHT = 80
+
 const PostFragment = graphql`
   {
     post {
@@ -63,6 +68,60 @@ const UserQuery = graphql`
 into:
 
 ```js
+var IMAGE_WIDTH = 80;
+var IMAGE_HEIGHT = 80;
+
+var PostFragment = function PostFragment(params) {
+  return {
+    fields: {
+      post: {
+        fields: {
+          title: {},
+          published_at: {}
+        }
+      }
+    }
+  };
+};
+
+var UserQuery = function UserQuery(params) {
+  return {
+    fields: {
+      user: {
+        params: {
+          id: params.id
+        },
+        fields: {
+          nickname: {},
+          avatar: {
+            params: {
+              width: IMAGE_WIDTH,
+              height: IMAGE_HEIGHT
+            },
+            fields: {
+              url: {}
+            }
+          },
+          posts: {
+            params: {
+              first: params.count
+            },
+            fields: {
+              count: {},
+              edges: {
+                fields: {
+                  node: {
+                    fields: _extends({}, PostFragment().fields)
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
+};
 ```
 
 [graphql-parser-gh]: https://github.com/ooflorent/graphql-parser/issues
