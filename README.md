@@ -10,50 +10,54 @@ _Issues related to GraphQL parsing should be reporter on `graphql-parser` [issue
 npm install --save-dev babel-plugin-graphql
 ```
 
-You also need the GraphQL type definitions (or any other compatible implementation):
-
-```sh
-npm install --save graphql-types
-```
-
 ## Usage
 
 Run:
 
 ```sh
-babel --plugins graphql script.js
+babel --plugins graphql.templateLiterals script.js
 ```
 
 Or add the plugin to your `.babelrc` configuration:
 
 ```json
 {
-  "plugins": [ "graphql:pre" ]
+  "plugins": [ "graphql.templateLiterals" ]
 }
 ```
+
+__Note:__ Due to current API limitations you need to enable `es7.objectRestSpread` transformer or _stage 1_ transformers.
 
 ## Example
 
 The plugin will compile the following code:
 
 ```js
+const IMAGE_WIDTH = 80
+const IMAGE_HEIGHT = 80
+
 const PostFragment = graphql`
-  post {
-    title,
-    published_at,
+  {
+    post {
+      title,
+      published_at
+    }
   }
 `
+
 const UserQuery = graphql`
-  user(<id>) {
-    nickname,
-    avatar.resize(${IMAGE_WIDTH}, ${IMAGE_HEIGHT}) {
-      url
-    },
-    posts.first(<count>) {
-      count,
-      edges {
-        node {
-          ${ PostFragment() }
+  {
+    user(id: <id>) {
+      nickname,
+      avatar(width: ${IMAGE_WIDTH}, height: ${IMAGE_HEIGHT}) {
+        url
+      },
+      posts(first: <count>) {
+        count,
+        edges {
+          node {
+            ${ PostFragment() }
+          }
         }
       }
     }
@@ -64,11 +68,59 @@ const UserQuery = graphql`
 into:
 
 ```js
+var IMAGE_WIDTH = 80;
+var IMAGE_HEIGHT = 80;
+
 var PostFragment = function PostFragment(params) {
-  return new GraphQL.Fragment("post", [new GraphQL.Field("title"), new GraphQL.Field("published_at")]);
+  return {
+    fields: {
+      post: {
+        fields: {
+          title: {},
+          published_at: {}
+        }
+      }
+    }
+  };
 };
+
 var UserQuery = function UserQuery(params) {
-  return new GraphQL.Query("user", [params.id], [new GraphQL.Field("nickname"), new GraphQL.Field("avatar", [new GraphQL.Field("url")], [new GraphQL.Call("resize", [IMAGE_WIDTH, IMAGE_HEIGHT])]), new GraphQL.Field("posts", [new GraphQL.Field("count"), new GraphQL.Field("edges", [new GraphQL.Field("node", [PostFragment()])])], [new GraphQL.Call("first", [params.count])])]);
+  return {
+    fields: {
+      user: {
+        params: {
+          id: params.id
+        },
+        fields: {
+          nickname: {},
+          avatar: {
+            params: {
+              width: IMAGE_WIDTH,
+              height: IMAGE_HEIGHT
+            },
+            fields: {
+              url: {}
+            }
+          },
+          posts: {
+            params: {
+              first: params.count
+            },
+            fields: {
+              count: {},
+              edges: {
+                fields: {
+                  node: {
+                    fields: _extends({}, PostFragment().fields)
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  };
 };
 ```
 
