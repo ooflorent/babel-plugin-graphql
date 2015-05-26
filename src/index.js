@@ -1,6 +1,6 @@
 import { parse, traverse } from 'graphql-parser'
 
-export const name = 'graphql.templateLiterals'
+export const name = 'graphql'
 
 export default function build(babel) {
   const { types: t, Transformer } = babel

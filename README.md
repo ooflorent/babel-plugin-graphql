@@ -15,14 +15,14 @@ npm install --save-dev babel-plugin-graphql
 Run:
 
 ```sh
-babel --plugins graphql.templateLiterals script.js
+babel --plugins graphql script.js
 ```
 
 Or add the plugin to your `.babelrc` configuration:
 
 ```json
 {
-  "plugins": [ "graphql.templateLiterals" ]
+  "plugins": [ "graphql" ]
 }
 ```
 
