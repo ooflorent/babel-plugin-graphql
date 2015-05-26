@@ -1,4 +1,4 @@
-import Plugin, { name as PLUGIN_NAME } from '../src'
+import Plugin from '../src'
 import assert from 'assert'
 import fs from 'fs'
 import { transform } from 'babel'
@@ -22,7 +22,7 @@ function run(testName) {
   })
 }
 
-describe(PLUGIN_NAME, () => {
+describe('graphql', () => {
   // Spec
   run('fields')
   run('literals')

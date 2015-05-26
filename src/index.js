@@ -1,7 +1,5 @@
 import { parse, traverse } from 'graphql-parser'
 
-export const name = 'graphql'
-
 export default function build(babel) {
   const { types: t, Transformer } = babel
 
@@ -79,7 +77,7 @@ export default function build(babel) {
     ]))
   }
 
-  return new Transformer(name, {
+  return new Transformer('graphql', {
     TaggedTemplateExpression: {
       enter(node) {
         if (t.isIdentifier(node.tag, {name: 'graphql'})) {
