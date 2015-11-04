@@ -1,7 +1,6 @@
 {
-  "stage": 0,
-  "loose": true,
-  "blacklist": [
-    "es6.tailCall"
+  "presets": [
+    "es2015",
+    "stage-0"
   ]
 }

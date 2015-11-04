@@ -1,8 +1,7 @@
 import { parse, traverse } from 'graphql-parser'
 
 export default function build(babel) {
-  const { types: t, Transformer } = babel
-
+  const { types: t } = babel
   class GraphQLVisitor {
     constructor(refs) {
       this.refs = refs
@@ -23,22 +22,22 @@ export default function build(babel) {
       const props = []
 
       if (node.alias) {
-        props.push(t.property('init', t.identifier('alias'), t.valueToNode(node.alias)))
+        props.push(t.objectProperty(t.identifier('alias'), t.valueToNode(node.alias)))
       }
 
       if (node.params.length > 0) {
-        props.push(t.property('init', t.identifier('params'), t.objectExpression(node.params)))
+        props.push(t.objectProperty(t.identifier('params'), t.objectExpression(node.params)))
       }
 
       if (node.fields.length > 0) {
         props.push(compileFields(node.fields))
       }
 
-      return t.property('init', t.identifier(node.name), t.objectExpression(props))
+      return t.objectProperty(t.identifier(node.name), t.objectExpression(props))
     }
 
     Argument(node) {
-      return t.property('init', t.identifier(node.name), node.value)
+      return t.objectProperty(t.identifier(node.name), node.value)
     }
 
     Literal(node) {
@@ -62,7 +61,7 @@ export default function build(babel) {
       }
     }
 
-    return t.property('init', t.identifier('fields'), t.objectExpression(fields))
+    return t.objectProperty(t.identifier('fields'), t.objectExpression(fields))
   }
 
   function compile(node) {
@@ -77,13 +76,16 @@ export default function build(babel) {
     ]))
   }
 
-  return new Transformer('graphql', {
-    TaggedTemplateExpression: {
-      enter(node) {
-        if (t.isIdentifier(node.tag, {name: 'graphql'})) {
-          return compile(node.quasi)
-        }
-      }
-    }
-  })
+  return {
+    visitor: {
+      TaggedTemplateExpression: {
+        enter(path) {
+          const { node } = path
+          if (t.isIdentifier(node.tag, {name: 'graphql'})) {
+            return path.replaceWith(compile(node.quasi))
+          }
+        },
+      },
+    },
+  }
 }
