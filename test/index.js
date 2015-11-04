@@ -1,10 +1,10 @@
 import Plugin from '../src'
 import assert from 'assert'
 import fs from 'fs'
-import { transform } from 'babel'
+import { transform } from 'babel-core'
 
 const opts = {
-  optional: [ 'es7.objectRestSpread' ],
+  presets: [ 'es2015', 'stage-0' ],
   plugins:  [ Plugin ],
 }
 
